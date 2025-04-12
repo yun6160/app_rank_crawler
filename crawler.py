@@ -87,10 +87,18 @@ def scroll_until_all_loaded(driver, max_scrolls=30, pause=2.0):
     for i in range(max_scrolls):
         print(f"🔽 [{i+1}/{max_scrolls}] 스크롤 중...")
         driver.execute_script("window.scrollBy(0, 1200);")
-        time.sleep(pause)
 
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-        rows = soup.select("div.dd-hover-row")
+        for _ in range(10):
+            time.sleep(0.2)
+            temp_soup = BeautifulSoup(driver.page_source, "html.parser")
+            temp_rows = temp_soup.select("div.dd-hover-row")
+            if len(temp_rows) > prev_total_count:
+                soup = temp_soup  # 이걸로 유지
+                rows = temp_rows
+                break
+        else:
+            soup = BeautifulSoup(driver.page_source, "html.parser")
+            rows = soup.select("div.dd-hover-row")
 
         for row in rows:
             name_tag = row.select_one('div.show-text.dd-max-ellipsis a[href^="/app/"]')
