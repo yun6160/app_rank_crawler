@@ -3,12 +3,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 import time
 import re
 import os
+import shutil
 
 # 🔐 로그인 정보 불러오기
 from dotenv import load_dotenv
@@ -18,15 +16,23 @@ email = os.getenv("UPUP_EMAIL")
 password = os.getenv("UPUP_PASSWORD")
 
 def login_and_get_titles(url: str) -> list[str]:
-    # 브라우저 보이게 하기 위해 headless 제거
     options = Options()
+    # 크롬 & 드라이버 경로 자동 탐색
+    chrome_path = shutil.which("chromium") or shutil.which("google-chrome") or shutil.which("chromium-browser")
+    driver_path = shutil.which("chromedriver")
+
+    if not chrome_path:
+        raise FileNotFoundError("❌ Chrome 실행 파일 경로를 찾을 수 없습니다. 시스템에 설치되어 있는지 확인하세요.")
+    if not driver_path:
+        raise FileNotFoundError("❌ Chromedriver 실행 파일 경로를 찾을 수 없습니다. 시스템에 설치되어 있는지 확인하세요.")
+    
+    options.binary_location = chrome_path
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--headless')  # 디버깅 시엔 주석 처리
-    options.binary_location = "/usr/bin/chromium"
     
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
+    service = Service(driver_path)
+    driver = webdriver.Chrome(service=service, options=options)
 
     try:
         driver.get("https://www.upup.com/login")
