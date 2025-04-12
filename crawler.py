@@ -13,27 +13,14 @@ load_dotenv()
 
 email = os.getenv("UPUP_EMAIL")
 password = os.getenv("UPUP_PASSWORD")
-os.environ.setdefault("CHROME_BIN", "/usr/bin/chromium")
-os.environ.setdefault("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")
 
 def login_and_get_titles(url: str) -> list[str]:
     options = Options()
-    # 크롬 & 드라이버 경로 자동 탐색
-    chrome_path = os.getenv("CHROME_BIN")
-    driver_path = os.getenv("CHROMEDRIVER_PATH")
-
-    st.markdown("### 🧪 경로 확인 테스트")
-    st.text(f"Chrome Path: {chrome_path}")
-    st.text(f"Chromedriver Path: {driver_path}")
-    
-    options.binary_location = chrome_path
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--headless')  # 디버깅 시엔 주석 처리
 
-    from selenium.webdriver.chrome.service import Service
-    service = Service(executable_path=driver_path)
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(options=options)
     
     try:
         driver.get("https://www.upup.com/login")
