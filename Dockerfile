@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# 환경 변수 설정
+ENV CHROME_BIN=/usr/bin/chromium \
+    CHROMEDRIVER_PATH=/usr/bin/chromedriver \
+    PYTHONUNBUFFERED=1
+
 # 작업 디렉토리 설정
 WORKDIR /app
 
