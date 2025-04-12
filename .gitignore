@@ -1,0 +1,43 @@
+# ▶️ Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+*.pyo
+*.pyd
+*.pdb
+
+# ▶️ VSCode
+.vscode/
+
+# ▶️ Virtual Environment
+env/
+venv/
+ENV/
+.venv/
+.idea/
+
+# ▶️ MacOS
+.DS_Store
+
+# ▶️ dotenv (환경 변수)
+.env
+
+# ▶️ Jupyter & IPython
+.ipynb_checkpoints
+*.ipynb
+
+# ▶️ Log & cache
+*.log
+*.sqlite3
+*.db
+.cache/
+*.bak
+
+# ▶️ Streamlit
+.streamlit/config.toml
+
+# ▶️ Excel or export files
+*.xlsx
+*.csv
