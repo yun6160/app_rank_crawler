@@ -15,13 +15,20 @@ load_dotenv()
 
 email = os.getenv("UPUP_EMAIL")
 password = os.getenv("UPUP_PASSWORD")
+env_mode = os.getenv("ENV", "production")
 
 def login_and_get_titles(url: str) -> list[str]:
     options = Options()
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--user-data-dir=/tmp/chrome-user-data')
+    
+    if env_mode=="development":
+        pass
+    else:
+        options.add_argument('--user-data-dir=/tmp/chrome-user-data')
+        
     options.add_argument('--headless')  # 디버깅 시엔 주석 처리
+    options.add_argument("--disable-blink-features=AutomationControlled")
 
     driver = webdriver.Chrome(options=options)
     
@@ -30,7 +37,6 @@ def login_and_get_titles(url: str) -> list[str]:
         st.text("⏳로그인을 시작합니다..")
         time.sleep(2)
 
-        # 4. 로그인 정보 입력 및 전송
         try:
             cookie_close_btn = WebDriverWait(driver, 3).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, "div.cookie-set button"))
@@ -52,16 +58,16 @@ def login_and_get_titles(url: str) -> list[str]:
         )
         driver.execute_script("arguments[0].click();", login_button)
 
-        time.sleep(5)  # 로그인 처리 대기
+        time.sleep(2)
 
         st.text("🎉로그인 완료")
     
         # 랭킹 페이지 이동
         driver.get(url)
-        st.text("⏳랭킹 페이지로 이동합니다...")
 
-        time.sleep(5)
+        time.sleep(2)
 
+        st.text("⏳크롤링 시작...")
         titles = scroll_until_all_loaded(driver)
 
     finally:
@@ -70,7 +76,7 @@ def login_and_get_titles(url: str) -> list[str]:
     return titles if titles else ["❌ 앱 타이틀을 찾을 수 없습니다."]
 
 
-def scroll_until_all_loaded(driver, max_scrolls=50, pause=2.5):
+def scroll_until_all_loaded(driver, max_scrolls=30, pause=2.0):
     from bs4 import BeautifulSoup
 
     apps = []
@@ -80,8 +86,8 @@ def scroll_until_all_loaded(driver, max_scrolls=50, pause=2.5):
 
     for i in range(max_scrolls):
         print(f"🔽 [{i+1}/{max_scrolls}] 스크롤 중...")
-        driver.execute_script("window.scrollBy(0, 1000);")
-        time.sleep(pause)
+        driver.execute_script("window.scrollBy(0, 1200);")
+        driver.implicitly_wait(int(pause))
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
         rows = soup.select("div.dd-hover-row")
@@ -156,7 +162,7 @@ def scroll_until_all_loaded(driver, max_scrolls=50, pause=2.5):
 
         if total_count == prev_total_count:
             unchanged_rounds += 1
-            if unchanged_rounds >= 3:
+            if unchanged_rounds >= 2:
                 print("✅ 3회 연속 변화 없음 → 스크롤 중단")
                 break
         else:
