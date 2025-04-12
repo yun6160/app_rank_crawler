@@ -18,12 +18,13 @@ def login_and_get_titles(url: str) -> list[str]:
     options = Options()
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--headless')  # 디버깅 시엔 주석 처리
+    # options.add_argument('--headless')  # 디버깅 시엔 주석 처리
 
     driver = webdriver.Chrome(options=options)
     
     try:
         driver.get("https://www.upup.com/login")
+        print("로그인 시작")
         time.sleep(2)
 
         # 4. 로그인 정보 입력 및 전송
