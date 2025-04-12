@@ -24,7 +24,7 @@ def login_and_get_titles(url: str) -> list[str]:
     
     try:
         driver.get("https://www.upup.com/login")
-        print("로그인 시작")
+        st.text("⏳로그인을 시작합니다..")
         time.sleep(2)
 
         # 4. 로그인 정보 입력 및 전송
@@ -40,9 +40,11 @@ def login_and_get_titles(url: str) -> list[str]:
 
         time.sleep(5)  # 로그인 처리 대기
 
+        st.text("🎉로그인 완료")
     
         # 랭킹 페이지 이동
         driver.get(url)
+        st.text("⏳랭킹 페이지로 이동합니다...")
 
         time.sleep(5)
 
