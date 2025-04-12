@@ -32,11 +32,13 @@ def login_and_get_titles(url: str) -> list[str]:
 
         # 4. 로그인 정보 입력 및 전송
         try:
-            cookie_close_btn = driver.find_element(By.CSS_SELECTOR, "div.cookie-set button")
+            cookie_close_btn = WebDriverWait(driver, 3).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "div.cookie-set button"))
+            )
             cookie_close_btn.click()
             time.sleep(1)
         except:
-            pass  # 배너 없으면 넘어감
+            pass
 
         email_input = driver.find_element(By.CSS_SELECTOR, "div.email-login input")
         email_input.send_keys(email)
@@ -45,10 +47,10 @@ def login_and_get_titles(url: str) -> list[str]:
         password_input.send_keys(password)
         password_input.send_keys(Keys.RETURN)
 
-        login_button_selector = "#__layout > div > section > main > div > div > div.card-wrap.el-col.el-col-12 > div > div.login-content > div.email-login > div > form > div:nth-child(4) > div > button"
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR,  login_button_selector))
-        ).click()
+        login_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#__layout > div > section > main > div > div > div.card-wrap.el-col.el-col-12 > div > div.login-content > div.email-login > div > form > div:nth-child(4) > div > button"))
+        )
+        driver.execute_script("arguments[0].click();", login_button)
 
         time.sleep(5)  # 로그인 처리 대기
 
