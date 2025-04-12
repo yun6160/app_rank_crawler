@@ -15,12 +15,14 @@ load_dotenv()
 
 email = os.getenv("UPUP_EMAIL")
 password = os.getenv("UPUP_PASSWORD")
+os.environ.setdefault("CHROME_BIN", "/usr/bin/chromium")
+os.environ.setdefault("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")
 
 def login_and_get_titles(url: str) -> list[str]:
     options = Options()
     # 크롬 & 드라이버 경로 자동 탐색
-    chrome_path = shutil.which("chromium") or shutil.which("google-chrome") or shutil.which("chromium-browser")
-    driver_path = shutil.which("chromedriver")
+    chrome_path = os.getenv("CHROME_BIN")
+    driver_path = os.getenv("CHROMEDRIVER_PATH")
 
     st.markdown("### 🧪 경로 확인 테스트")
     st.text(f"Chrome Path: {chrome_path}")
