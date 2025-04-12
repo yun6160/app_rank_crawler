@@ -2,11 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 import time
 import re
 import os
-import shutil
 import streamlit as st
 
 # 🔐 로그인 정보 불러오기
@@ -32,10 +30,11 @@ def login_and_get_titles(url: str) -> list[str]:
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--headless')  # 디버깅 시엔 주석 처리
-    
-    service = Service(driver_path)
-    driver = webdriver.Chrome(service=service, options=options)
 
+    from selenium.webdriver.chrome.service import Service
+    service = Service(executable_path=driver_path)
+    driver = webdriver.Chrome(service=service, options=options)
+    
     try:
         driver.get("https://www.upup.com/login")
         time.sleep(2)
@@ -66,8 +65,6 @@ def login_and_get_titles(url: str) -> list[str]:
 
     return titles if titles else ["❌ 앱 타이틀을 찾을 수 없습니다."]
 
-
-from selenium.webdriver.common.by import By
 
 def scroll_until_all_loaded(driver, max_scrolls=50, pause=2.5):
     from bs4 import BeautifulSoup
