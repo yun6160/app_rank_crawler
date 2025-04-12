@@ -6,6 +6,8 @@ import time
 import re
 import os
 import streamlit as st
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # 🔐 로그인 정보 불러오기
 from dotenv import load_dotenv
@@ -29,6 +31,13 @@ def login_and_get_titles(url: str) -> list[str]:
         time.sleep(2)
 
         # 4. 로그인 정보 입력 및 전송
+        try:
+            cookie_close_btn = driver.find_element(By.CSS_SELECTOR, "div.cookie-set button")
+            cookie_close_btn.click()
+            time.sleep(1)
+        except:
+            pass  # 배너 없으면 넘어감
+
         email_input = driver.find_element(By.CSS_SELECTOR, "div.email-login input")
         email_input.send_keys(email)
 
@@ -36,8 +45,10 @@ def login_and_get_titles(url: str) -> list[str]:
         password_input.send_keys(password)
         password_input.send_keys(Keys.RETURN)
 
-        login_button = driver.find_element(By.CSS_SELECTOR, "#__layout > div > section > main > div > div > div.card-wrap.el-col.el-col-12 > div > div.login-content > div.email-login > div > form > div:nth-child(4) > div > button")
-        login_button.click()
+        login_button_selector = "#__layout > div > section > main > div > div > div.card-wrap.el-col.el-col-12 > div > div.login-content > div.email-login > div > form > div:nth-child(4) > div > button"
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR,  login_button_selector))
+        ).click()
 
         time.sleep(5)  # 로그인 처리 대기
 
