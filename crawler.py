@@ -15,18 +15,12 @@ load_dotenv()
 
 email = os.getenv("UPUP_EMAIL")
 password = os.getenv("UPUP_PASSWORD")
-env_mode = os.getenv("ENV", "production")
 
 def login_and_get_titles(url: str) -> list[str]:
     options = Options()
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-    
-    if env_mode=="development":
-        pass
-    else:
-        options.add_argument('--user-data-dir=/tmp/chrome-user-data')
-        
+    options.add_argument('--user-data-dir=/tmp/chrome-user-data')    # 로컬에서는 주석처리
     options.add_argument('--headless')  # 디버깅 시엔 주석 처리
     options.add_argument("--disable-blink-features=AutomationControlled")
 
