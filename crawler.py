@@ -87,7 +87,7 @@ def scroll_until_all_loaded(driver, max_scrolls=30, pause=2.0):
     for i in range(max_scrolls):
         print(f"🔽 [{i+1}/{max_scrolls}] 스크롤 중...")
         driver.execute_script("window.scrollBy(0, 1200);")
-        driver.implicitly_wait(int(pause))
+        time.sleep(pause)
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
         rows = soup.select("div.dd-hover-row")
