@@ -7,6 +7,7 @@ import time
 import re
 import os
 import shutil
+import streamlit as st
 
 # 🔐 로그인 정보 불러오기
 from dotenv import load_dotenv
@@ -21,10 +22,9 @@ def login_and_get_titles(url: str) -> list[str]:
     chrome_path = shutil.which("chromium") or shutil.which("google-chrome") or shutil.which("chromium-browser")
     driver_path = shutil.which("chromedriver")
 
-    if not chrome_path:
-        raise FileNotFoundError("❌ Chrome 실행 파일 경로를 찾을 수 없습니다. 시스템에 설치되어 있는지 확인하세요.")
-    if not driver_path:
-        raise FileNotFoundError("❌ Chromedriver 실행 파일 경로를 찾을 수 없습니다. 시스템에 설치되어 있는지 확인하세요.")
+    st.markdown("### 🧪 경로 확인 테스트")
+    st.text(f"Chrome Path: {chrome_path}")
+    st.text(f"Chromedriver Path: {driver_path}")
     
     options.binary_location = chrome_path
     options.add_argument('--no-sandbox')
