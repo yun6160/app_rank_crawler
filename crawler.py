@@ -23,6 +23,7 @@ def login_and_get_titles(url: str) -> list[str]:
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--headless')  # 디버깅 시엔 주석 처리
+    options.binary_location = "/usr/bin/chromium"
     
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
