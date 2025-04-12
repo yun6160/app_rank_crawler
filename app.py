@@ -6,7 +6,7 @@ from crawler import login_and_get_titles
 
 st.set_page_config(page_title="📊 앱 순위 크롤링 도구", layout="centered")
 
-st.title("📊 앱 순위 크롤링 도구")
+st.title("📊 UPUP 앱 순위 크롤링 도구")
 st.markdown("URL을 입력하면 해당 페이지에서 **앱 순위 및 정보**를 가져옵니다(자동 로그인됨!)")
 
 url = st.text_input("🔗 크롤링할 URL을 입력하세요")
