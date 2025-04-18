@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
@@ -20,11 +21,16 @@ def login_and_get_titles(url: str) -> list[str]:
     options = Options()
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--user-data-dir=/tmp/chrome-user-data')    # 로컬에서는 주석처리
-    options.add_argument('--headless')  # 디버깅 시엔 주석 처리
+    # options.add_argument('--user-data-dir=/tmp/chrome-user-data')    # 로컬에서는 주석처리
+    # options.add_argument('--headless')  # 디버깅 시엔 주석 처리
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add.argument("--disable-gpu")
 
-    driver = webdriver.Chrome(options=options)
+    driver_path = os.path.join(os.getcwd(), 'chromedriver.exe')
+
+    service = Service(driver_path)
+
+    driver = webdriver.Chrome(service=service, options=options)
     
     try:
         driver.get("https://www.upup.com/login")
@@ -141,7 +147,7 @@ def scroll_until_all_loaded(driver, max_scrolls=30, pause=2.0):
 
                 apps.append({
                     "name": name,
-                    "href": href,
+                    "href": 'https://www.upup.com'+href,
                     "developer": dev,
                     "total_rank": total_rank,
                     "total_rank_change":total_rank_change,

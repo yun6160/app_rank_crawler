@@ -20,8 +20,8 @@ def login_and_get_titles(url: str) -> list[str]:
     options = Options()
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--user-data-dir=/tmp/chrome-user-data')    # 로컬에서는 주석처리
-    options.add_argument('--headless')  # 디버깅 시엔 주석 처리
+    # options.add_argument('--user-data-dir=/tmp/chrome-user-data')    # 로컬에서는 주석처리
+    # options.add_argument('--headless')  # 디버깅 시엔 주석 처리
     options.add_argument("--disable-blink-features=AutomationControlled")
 
     driver = webdriver.Chrome(options=options)
@@ -141,7 +141,7 @@ def scroll_until_all_loaded(driver, max_scrolls=30, pause=2.0):
 
                 apps.append({
                     "name": name,
-                    "href": href,
+                    "href": 'https://www.upup.com'+href,
                     "developer": dev,
                     "total_rank": total_rank,
                     "total_rank_change":total_rank_change,
